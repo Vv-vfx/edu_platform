@@ -17,5 +17,5 @@ urlpatterns = [
     path('course/delete/<int:pk>', views.CourseDeleteView.as_view(), name='delete_course'),
     path('course/add', views.CourseAddView.as_view(), name='add_course'),
     path('courses/', views.CoursesView.as_view(), name='courses'),
-    path('contact/', views.ContactView.as_view(), name='contact'),
+    path('contact/', views.ContactFormView.as_view(), name='contact'),
 ]

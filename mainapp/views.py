@@ -1,8 +1,9 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, TemplateView, DetailView, CreateView, UpdateView, DeleteView
-
+from django.views.generic import ListView, TemplateView, DetailView, CreateView, UpdateView, DeleteView, FormView
 from mainapp.models import CourseCategory, Course
+from mainapp.forms import CourseForm, ContactForm
 
 
 class IndexView(ListView):
@@ -36,7 +37,7 @@ class CourseDeleteView(DeleteView):
 
 
 class CourseAddView(CreateView):
-    fields = '__all__'
+    form_class = CourseForm
     model = Course
     template_name = 'mainapp/add_course.html'
     success_url = reverse_lazy('mainapp:courses')
@@ -46,6 +47,7 @@ class CoursesView(ListView):
     model = Course
     template_name = 'mainapp/courses.html'
     context_object_name = 'courses'
+
 
 # КАТЕГОРИИ КУРСОВ
 class CourseCategoriesView(ListView):
@@ -80,3 +82,16 @@ class CourseCategoryDetailView(DetailView):
     model = CourseCategory
     template_name = 'mainapp/category.html'
     context_object_name = 'category'
+
+
+class ContactFormView(FormView):
+    form_class = ContactForm
+    success_url = reverse_lazy('mainapp:index')
+    template_name = 'mainapp/contact.html'
+
+    def form_valid(self, form):
+        data = form.cleaned_data
+        email = data['email']
+        message = data['message']
+        print(email, message)
+        return super().form_valid(form)

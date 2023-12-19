@@ -18,9 +18,9 @@ make apprun
 ```
 python manage.py migrate
 ```
-Создаем пользователя:
+Создаем пользователя login=admin, password=12345:
 ```
-python manage.py createsuperuser
+python manage.py create_admin
 ```
 Заполняем базу:
 ```

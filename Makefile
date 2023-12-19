@@ -20,4 +20,4 @@ migrate:
 	python manage.py migrate
 
 createsuperuser:
-	python manage.py createsuperuser
+	python manage.py create_admin
