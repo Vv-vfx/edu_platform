@@ -3,7 +3,8 @@ import random
 from django.core.management.base import BaseCommand, CommandError
 from faker import Faker
 
-from mainapp.models import CourseCategory, Course, Role, User
+from mainapp.models import CourseCategory, Course
+from userapp.models import Role, MyUser
 
 
 class Command(BaseCommand):
@@ -12,8 +13,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         print("Filling db fake")
 
-        Faker.seed(11)
-        fake = Faker('ru_RU')
+
 
         # print('Deleting Role')
         # Role.objects.all().delete()
@@ -94,7 +94,7 @@ class Command(BaseCommand):
         course_list = []
         for course, data in course_dict.items():
             obj = Course.objects.create(slug=course, name=data[0], description=data[1], price=data[2])
-            obj.categories.set(data[3])
+            obj.category.set(data[3])
             obj.save()
             course_list.append(obj)
 
@@ -112,8 +112,13 @@ class Command(BaseCommand):
 
         print("Creating User")
 
-        for _ in range(50):
-            full_name = fake.name().split()
+        Faker.seed(11)
+        fake = Faker('ru_RU')
+
+        for index, _ in enumerate(range(10)):
+            Faker.seed(100)
+            full_name = fake.unique.name().split()
+            # print(full_name)
 
             role = random.choice(role_list)
             if role is not registered:
@@ -121,7 +126,9 @@ class Command(BaseCommand):
             else:
                 course = None
 
-            user = User(lastname=full_name[0],
+            user = MyUser(
+                        username=fake.profile()['username'] + str(index),
+                        lastname=full_name[0],
 
                         name=full_name[1],
                         surname=full_name[2],
