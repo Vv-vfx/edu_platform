@@ -1,9 +1,11 @@
+from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, TemplateView, DetailView, CreateView, UpdateView, DeleteView, FormView
 from mainapp.models import CourseCategory, Course
 from mainapp.forms import CourseForm, ContactForm
+from userapp.models import MyUser
 
 
 class IndexView(ListView):
@@ -95,3 +97,17 @@ class ContactFormView(FormView):
         message = data['message']
         print(email, message)
         return super().form_valid(form)
+
+
+class UsersInfoView(ListView):
+    model = MyUser
+    template_name = 'mainapp/users_info.html'
+    context_object_name = 'users'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        queryset = queryset.select_related('role')
+        queryset = queryset.prefetch_related('courses')
+
+        return queryset

@@ -12,11 +12,11 @@ class Role(models.Model):
 
 
 class MyUser(AbstractUser):
-    lastname = models.CharField(max_length=64)
-    name = models.CharField(max_length=64)
-    surname = models.CharField(max_length=64)
+    lastname = models.CharField(max_length=256)
+    name = models.CharField(max_length=256)
+    surname = models.CharField(max_length=256)
     email = models.EmailField(unique=True)
-    password = models.CharField(max_length=64)
+    password = models.CharField(max_length=256)
     role = models.ForeignKey(Role, on_delete=models.PROTECT, default=1)
     courses = models.ManyToManyField(Course, blank=True)
 

@@ -1,0 +1,21 @@
+version: "3.4"
+
+services:
+  pg:
+    container_name: edu_platform_db_docker_container
+    env_file:
+      - ./local/.env.local
+    image: postgres:16
+
+    ports:
+      - "15432:5432"
+#    volumes:
+#      - db-data:/var/lib/postgresql/data/pgdata
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $$POSTGRES_DB -U $$POSTGRES_USER"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+
+#volumes:
+#  db-data:

@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
-from django.contrib.auth.models import User
 from django.db import IntegrityError
+from userapp.models import MyUser
 
 
 class Command(BaseCommand):
@@ -8,7 +8,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         try:
-            user = User.objects.create_superuser(
+            user = MyUser.objects.create_superuser(
                 username='admin',
                 email='<EMAIL>',
                 password='12345'
