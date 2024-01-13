@@ -17,5 +17,44 @@ services:
       timeout: 60s
       retries: 5
 
+  redis:
+    container_name: edu_platform_redis
+    env_file:
+      - ./local/.env.local
+    image: redis:latest
+    ports:
+      - "16379:6379"
+    command: /bin/sh -c "redis-server --requirepass $${REDIS_PASSWORD:?REDIS_PASSWORD variable is not set}"
+
+  worker_high:
+    build:
+      context: .
+      dockerfile: ./local/Dockerfile
+    container_name: edu_platform_worker_high
+    network_mode: host # для того, чтобы Docker использовал сеть хоста во время запуска контейнера.
+    command: python manage.py rqworker high # обслуживает очередь high
+    depends_on:
+      - redis
+    environment:
+      - REDIS_URL=redis://:$$REDIS_PASSWORD@redis:6379/0
+
+  worker_low:
+    build:
+      context: .
+      dockerfile: ./local/Dockerfile
+    container_name: edu_platform_worker_low
+    network_mode: host # для того, чтобы Docker использовал сеть хоста во время запуска контейнера.
+    command: python manage.py rqworker low # бслуживает очередь low
+    depends_on:
+      - redis
+    environment:
+      - REDIS_URL=redis://:$$REDIS_PASSWORD@redis:6379/0
+
+
+#    volumes:
+#      - /path/to/local/dаta:/root/redis
+#      - /path/to/local/redis.conf:/usr/local/etc/redis/redis.conf
+
+
 #volumes:
 #  db-data:

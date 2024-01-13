@@ -1,3 +1,4 @@
+import django_rq
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -5,6 +6,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, TemplateView, DetailView, CreateView, UpdateView, DeleteView, FormView
 from mainapp.models import CourseCategory, Course
 from mainapp.forms import CourseForm, ContactForm
+from mainapp.tasks import send_email_to_user, send_email_to_admin
 from userapp.models import MyUser
 
 
@@ -93,9 +95,18 @@ class ContactFormView(FormView):
 
     def form_valid(self, form):
         data = form.cleaned_data
-        email = data['email']
+        user_email = data['email']
         message = data['message']
-        print(email, message)
+        # print(email, message)
+        send_email_to_user.delay(email=user_email,
+                                 topic='Вы отправили нам сообщение со следующим содержанием:',
+                                 message=message,
+                                 )
+        send_email_to_admin.delay(email=user_email,
+                                 topic='Нам новое сообщение с формы контактов',
+                                 message=message,
+                                 )
+
         return super().form_valid(form)
 
 

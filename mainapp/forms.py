@@ -1,5 +1,6 @@
 from django import forms
 from .models import Course, CourseCategory
+from django.utils.translation import gettext_lazy as _
 
 
 class CourseForm(forms.ModelForm):
@@ -83,3 +84,15 @@ class ContactForm(forms.Form):
             }
         )
     )
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email", None)
+        if email is None:
+            raise forms.ValidationError(_('Введите email'))
+        return email
+
+    def clean_message(self):
+        message = self.cleaned_data.get("message", None)
+        if message is None:
+            raise forms.ValidationError(_('Введите сообщение'))
+        return message

@@ -16,11 +16,8 @@ from dotenv import dotenv_values
 env = dotenv_values(dotenv_path='./local/.env.local')
 print(env)
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -33,6 +30,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Application definition
 
@@ -45,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Other
     'debug_toolbar',
+    "django_rq",
     # My apps
     'mainapp',
     'userapp',
@@ -67,7 +66,7 @@ ROOT_URLCONF = 'settings.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [Path(BASE_DIR / 'templates'),],
+        'DIRS': [Path(BASE_DIR / 'templates'), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -81,7 +80,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'settings.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -104,6 +102,29 @@ DATABASES = {
     }
 }
 
+RQ_QUEUES = {
+    'default': {
+        'HOST': env['REDIS_HOST'],
+        'PORT': 16379,
+        'DB': 0,
+        'PASSWORD': env['REDIS_PASSWORD'],
+        'DEFAULT_TIMEOUT': 360,
+    },
+    'high': {
+        'HOST': env['REDIS_HOST'],
+        'PORT': 16379,
+        'DB': 0,
+        'PASSWORD': env['REDIS_PASSWORD'],
+        'DEFAULT_TIMEOUT': 360,
+    },
+    'low': {
+        'HOST': env['REDIS_HOST'],
+        'PORT': 16379,
+        'DB': 0,
+        'PASSWORD': env['REDIS_PASSWORD'],
+        'DEFAULT_TIMEOUT': 360,
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -123,7 +144,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -134,7 +154,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
@@ -151,7 +170,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 INTERNAL_IPS = [
     # ...
     "127.0.0.1",
-    # ...
+
 ]
 
 AUTH_USER_MODEL = 'userapp.MyUser'
