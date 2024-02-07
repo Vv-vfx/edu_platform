@@ -2,6 +2,7 @@ import random
 
 from django.core.management.base import BaseCommand, CommandError
 from faker import Faker
+from rest_framework.authtoken.models import Token
 
 from mainapp.models import CourseCategory, Course
 from userapp.models import Role, MyUser
@@ -59,8 +60,6 @@ class Command(BaseCommand):
             course_category_list.append(obj)
 
         CourseCategory.objects.bulk_create(course_category_list)
-
-        # coursecategory_list = [programming, arhitecture, infrastructure, safety, gamedev, administration]
 
         course_dict = {
             'ios_dev_pro_1': (
@@ -133,6 +132,8 @@ class Command(BaseCommand):
             if course is not None:
                 user.courses.add(course)
                 user.save()
+
+            Token.objects.create(user=user)
 
         self.stdout.write(
             self.style.SUCCESS('Successfully fill db fake'))

@@ -85,21 +85,21 @@
                     <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Фамилия</th>
-                        <th scope="col">Имя</th>
-                        <th scope="col">Отчество</th>
-                        <th scope="col">email</th>
-                        <th scope="col">Роль</th>
-                        <th scope="col">Курсы</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">First_name</th>
+                        <th scope="col">Last_name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Courses</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for user in users %}
                         <tr>
                             <th scope="row">{{ user.id }}</th>
-                            <td>{{ user.lastname }}</td>
-                            <td>{{ user.name }}</td>
-                            <td>{{ user.surname }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.first_name }}</td>
+                            <td>{{ user.last_name }}</td>
                             <td>{{ user.email }}</td>
                             <td>{{ user.role }}</td>
                               <td>

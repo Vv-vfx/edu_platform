@@ -1,9 +1,14 @@
-from rest_framework.relations import HyperlinkedIdentityField
-from rest_framework.serializers import Serializer, ModelSerializer, HyperlinkedModelSerializer
-from mainapp.models import CourseCategory
+from rest_framework.serializers import HyperlinkedModelSerializer, HyperlinkedRelatedField
+from mainapp.models import Course
 
 
-class CourseCategorySerializer(HyperlinkedModelSerializer):
+class CourseSerializer(HyperlinkedModelSerializer):
+    category = HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name='category'
+    )
+
     class Meta:
-        model = CourseCategory
-        fields = '__all__'
+        model = Course
+        fields = ['name', 'description', 'category']

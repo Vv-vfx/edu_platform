@@ -1,12 +1,9 @@
 from django.urls import path, include
-from rest_framework import routers
-from api.views import CourseCategoryViewSet
+from .router import router
 
-router = routers.DefaultRouter()
-router.register(r'coursecategory', CourseCategoryViewSet)
-
-# app_name = 'api'
+app_name = 'api'
 
 urlpatterns = [
-    path('api/', include(router.urls))
+    path('', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

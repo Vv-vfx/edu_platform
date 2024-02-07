@@ -25,7 +25,6 @@ class MyUserCreationForm(UserCreationForm):
         user.email = self.cleaned_data['email']
         user.set_password(self.cleaned_data["password1"])
         if commit:
-            print('зашел в save')
             user.save()
         return user
 

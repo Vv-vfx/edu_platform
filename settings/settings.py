@@ -47,9 +47,11 @@ INSTALLED_APPS = [
     'debug_toolbar',
     "django_rq",
     'rest_framework',
+    'rest_framework.authtoken',
     # My apps
     'mainapp',
     'userapp',
+    'api'
 
 ]
 
@@ -69,7 +71,7 @@ ROOT_URLCONF = 'settings.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [Path(BASE_DIR / 'templates'), ],
+        'DIRS': [Path(BASE_DIR / 'templates'),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -134,7 +136,7 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny'
+        'rest_framework.permissions.IsAuthenticated'
     ]
 }
 
