@@ -1,4 +1,3 @@
-from django.contrib import admin
 from django.urls import path
 
 from . import views
@@ -19,4 +18,5 @@ urlpatterns = [
     path('courses/', views.CoursesView.as_view(), name='courses'),
     path('contact/', views.ContactFormView.as_view(), name='contact'),
     path('users/', views.UsersInfoView.as_view(), name='users_db_info'),
+
 ]

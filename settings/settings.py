@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+
+from django.urls import reverse_lazy
 from dotenv import dotenv_values
 
 env = dotenv_values(dotenv_path='./local/.env.local')
@@ -44,6 +46,7 @@ INSTALLED_APPS = [
     # Other
     'debug_toolbar',
     "django_rq",
+    'rest_framework',
     # My apps
     'mainapp',
     'userapp',
@@ -126,6 +129,15 @@ RQ_QUEUES = {
     }
 }
 
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny'
+    ]
+}
+
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
@@ -143,6 +155,9 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+LOGIN_REDIRECT_URL = reverse_lazy('userapp:profile')
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/

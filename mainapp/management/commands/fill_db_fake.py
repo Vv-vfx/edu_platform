@@ -122,9 +122,8 @@ class Command(BaseCommand):
 
             user = MyUser(
                 username=fake.profile()['username'] + str(index),
-                lastname=full_name[0],
-                name=full_name[1],
-                surname=full_name[2],
+                last_name=full_name[0],
+                first_name=full_name[1],
                 email=fake.unique.email(),
                 role=role,
                 password=fake.password(length=20),

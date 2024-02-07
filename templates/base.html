@@ -76,8 +76,25 @@
                                                 <li><a href="{% url 'mainapp:contact' %}">Контакты</a></li>
                                                 <li><a href="{% url 'mainapp:users_db_info' %}">Пользователи</a></li>
                                                 <!-- Button -->
-                                                <li class="button-header margin-left "><a href="#" class="btn">Регистрация</a></li>
-                                                <li class="button-header"><a href="login.html" class="btn btn3">Вход</a></li>
+                                                {% if user.is_authenticated %}
+                                                <li class="button-header margin-left "><a href="{% url 'userapp:profile' %}" class="btn">Профиль</a></li>
+                                                <li class="button-header">
+                                                    <form action="{% url 'userapp:logout' %}" method="post">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="btn btn3">Выход</button>
+                                                    </form>
+                                                </li>
+
+                                                {% else %}
+                                                <li class="button-header margin-left "><a href="{% url 'userapp:register' %}" class="btn">Регистрация</a></li>
+                                                <li class="button-header"><a href="{% url 'userapp:login' %}" class="btn btn3">Вход</a></li>
+
+
+                                                {% endif %}
+
+
+
+
                                             </ul>
                                         </nav>
                                     </div>
