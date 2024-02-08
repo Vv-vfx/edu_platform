@@ -48,6 +48,14 @@
                     <br>
 					{{MyUser.role}}
                     <br>
+                    API-Token:
+                    <br>
+					{{token}}
+                    <br>
+                <form action="{% url 'userapp:profile' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" name="regenerate_token">Перегенерировать Токен</button>
+                </form>
                 </p>
 			</div>
 		</section>

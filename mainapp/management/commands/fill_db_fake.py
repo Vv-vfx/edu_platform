@@ -111,7 +111,6 @@ class Command(BaseCommand):
         for index, _ in enumerate(range(500)):
             Faker.seed(100)
             full_name = fake.unique.name().split()
-            # print(full_name)
 
             role = random.choice(role_list)
             if role.name is not 'registered':

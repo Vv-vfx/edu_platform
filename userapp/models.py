@@ -13,14 +13,10 @@ class Role(models.Model):
 
 
 class MyUser(AbstractUser):
-    # lastname = models.CharField(max_length=256)
-    # name = models.CharField(max_length=256)
-    # surname = models.CharField(max_length=256)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=256)
     role = models.ForeignKey(Role, on_delete=models.PROTECT, default=1)
     courses = models.ManyToManyField(Course, blank=True)
-
 
     def save(self, *args, **kwargs):
         # Установка роли по умолчанию, если она не указана
@@ -31,9 +27,6 @@ class MyUser(AbstractUser):
             default_role = Role.objects.get(name='registered')  # Или get(id=desired_id)
             self.role = default_role
             Token.objects.create(user=self)
-
-
-
 
         super().save(*args, **kwargs)
 

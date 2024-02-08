@@ -6,7 +6,8 @@ from django.urls import reverse_lazy
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView
 from .forms import MyUserCreationForm, MyUserLoginForm
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login
+from rest_framework.authtoken.models import Token
 
 from .models import MyUser
 
@@ -19,10 +20,12 @@ class UserRegisterView(CreateView):
     def form_valid(self, form):
         # Этот метод вызывается, когда валидные данные формы были отправлены
 
-        # вызываем родительский метод
+        # вызываем родительский метод и здесь же вызывается save() из MyUserCreationForm
         response = super().form_valid(form)
-        # получаем user из метода формы save()
-        user = form.save()
+
+
+        # # Получаем сохраненный объект пользователя из метода формы save()
+        user = self.object
         # если user есть - логин
         if user is not None:
             # Автоматический вход после регистрации
@@ -44,3 +47,16 @@ class UserProfileView(LoginRequiredMixin, DetailView):
 
     def get_object(self):
         return self.request.user
+
+    def get_context_data(self, **kwargs):
+        # Получаем контекст от базового класса
+        context = super().get_context_data(**kwargs)
+        # Добавляем токен в контекст, если пользователь авторизован
+        if self.request.user.is_authenticated:
+            token = Token.objects.get(user=self.request.user)
+            context['token'] = token.key
+        else:
+            context['token'] = 'Пользователь не авторизован'
+
+        return context
+
