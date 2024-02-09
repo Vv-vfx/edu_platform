@@ -6,6 +6,9 @@ from rest_framework.authtoken.models import Token
 
 from mainapp.models import CourseCategory, Course
 from userapp.models import Role, MyUser
+from django.contrib.auth.models import Group, Permission
+
+from userapp.user_group import registered_role_group, student_role_group, teacher_role_group, curator_role_group
 
 
 class Command(BaseCommand):
@@ -103,36 +106,115 @@ class Command(BaseCommand):
         # role_list = [registered, student, teacher]
         Role.objects.bulk_create(role_list)
 
+        # ==================================================
+        # ==================================================
+
+
         print("Creating User")
 
         Faker.seed(11)
         fake = Faker('ru_RU')
 
-        for index, _ in enumerate(range(500)):
+        for index, _ in enumerate(range(50)):
             Faker.seed(100)
             full_name = fake.unique.name().split()
 
             role = random.choice(role_list)
-            if role.name is not 'registered':
+            if role.name != 'registered':
                 course = random.choice(course_list)
             else:
                 course = None
 
-            user = MyUser(
+            user = MyUser.objects.create_user(
                 username=fake.profile()['username'] + str(index),
                 last_name=full_name[0],
                 first_name=full_name[1],
                 email=fake.unique.email(),
                 role=role,
-                password=fake.password(length=20),
+                password=fake.password(length=20)
             )
 
-            user.save()
             if course is not None:
                 user.courses.add(course)
                 user.save()
 
+            # создаем для пользователя токен для DRF
             Token.objects.create(user=user)
+
+            # добавляем пользователя в группу
+            if user.role.name == 'registered':
+                registered_role_group.user_set.add(user)
+            elif user.role.name == 'student':
+                student_role_group.user_set.add(user)
+            elif user.role.name == 'teacher':
+                teacher_role_group.user_set.add(user)
+
+        print('Создание определенных пользователей для тестов')
+
+        # ======================================
+        # создаем пользователя в группе "student"
+        user = MyUser.objects.create_user(
+            username='student',
+            last_name='Ivanov',
+            first_name='Ivan',
+            email='student@gmail.com',
+            # добавляем роль student
+            role=role_list[1],
+            password='12345'
+        )
+
+
+
+        # Добавляем в группу Django для "student"
+        student_role_group.user_set.add(user)
+        # создаем для пользователя токен для DRF
+        Token.objects.create(user=user)
+
+        print('user_groups:')
+        groups = user.groups.all()
+        for group in groups:
+            print(group.name)
+
+        print('user_permissions:')
+        permissions = user.user_permissions.all()
+        for perm in permissions:
+            print(perm.codename)
+
+
+
+        # ======================================
+        # создаем пользователя в группе "teacher"
+
+        user = MyUser.objects.create_user(
+            username='teacher',
+            last_name='Sergeev',
+            first_name='Sergey',
+            email='teacher@gmail.com',
+            # добавляем роль teacher
+            role=role_list[2],
+            password='12345'
+        )
+        # Добавляем в группу Django для "teacher"
+        teacher_role_group.user_set.add(user)
+        # создаем для пользователя токен для DRF
+        Token.objects.create(user=user)
+
+        # ======================================
+        # создаем пользователя в группе "curator"
+
+        user = MyUser.objects.create_user(
+            username='curator',
+            last_name='Sergeev',
+            first_name='Sergey',
+            email='curator@gmail.com',
+            # добавляем роль teacher
+            role=role_list[2],
+            password='12345'
+        )
+        # Добавляем в группу Django для "curator"
+        curator_role_group.user_set.add(user)
+        # создаем для пользователя токен для DRF
+        Token.objects.create(user=user)
 
         self.stdout.write(
             self.style.SUCCESS('Successfully fill db fake'))

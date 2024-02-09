@@ -3,7 +3,7 @@ from requests.auth import HTTPBasicAuth
 
 url = "http://127.0.0.1:8000/api/course/"
 
-username = 'slavon'
+username = 'Ivan'
 password = 'xxxccc3456567'
 token = '82691fa59bf07bb6831818583e56622be251dbd3'
 

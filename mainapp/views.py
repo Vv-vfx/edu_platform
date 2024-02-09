@@ -1,13 +1,21 @@
-import django_rq
-from django.contrib.auth.models import User
-from django.http import HttpResponse
-from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, TemplateView, DetailView, CreateView, UpdateView, DeleteView, FormView
-from mainapp.models import CourseCategory, Course
+from django.views.generic import (ListView,
+                                  TemplateView,
+                                  DetailView,
+                                  CreateView,
+                                  UpdateView,
+                                  DeleteView,
+                                  FormView)
+from mainapp.models import CourseCategory,Course
 from mainapp.forms import CourseForm, ContactForm
 from mainapp.tasks import send_email_to_user, send_email_to_admin
 from userapp.models import MyUser
+from userapp.user_group_mixins import (
+    RegistredRoleGroupRequiredMixin,
+    StudentRoleGroupRequiredMixin,
+    TeacherRoleGroupRequiredMixin,
+    СuratorRoleGroupRequiredMixin
+)
 
 
 class IndexView(ListView):
@@ -20,34 +28,53 @@ class ContactView(TemplateView):
     template_name = 'mainapp/contact.html'
 
 
-class CourseDetailView(DetailView):
+class CourseDetailView(
+    # RegistredRoleGroupRequiredMixin,
+    # StudentRoleGroupRequiredMixin,
+    # TeacherRoleGroupRequiredMixin,
+    DetailView
+):
     model = Course
     template_name = 'mainapp/course.html'
     context_object_name = 'course'
 
 
-class CourseUpdateView(UpdateView):
+class CourseUpdateView(
+    # TeacherRoleGroupRequiredMixin,
+    UpdateView,
+):
     fields = '__all__'
     model = Course
     template_name = 'mainapp/update_course.html'
     success_url = reverse_lazy('mainapp:courses')
 
 
-class CourseDeleteView(DeleteView):
+class CourseDeleteView(
+    # СuratorRoleGroupRequiredMixin,
+    DeleteView
+):
     model = Course
     template_name = 'mainapp/delete_course.html'
     success_url = reverse_lazy('mainapp:courses')
     context_object_name = 'course'
 
 
-class CourseAddView(CreateView):
+class CourseAddView(
+    # TeacherRoleGroupRequiredMixin,
+    CreateView
+):
     form_class = CourseForm
     model = Course
     template_name = 'mainapp/add_course.html'
     success_url = reverse_lazy('mainapp:courses')
 
 
-class CoursesView(ListView):
+class CoursesView(
+    # RegistredRoleGroupRequiredMixin,
+    # StudentRoleGroupRequiredMixin,
+    # TeacherRoleGroupRequiredMixin,
+    ListView
+):
     model = Course
     template_name = 'mainapp/courses.html'
     context_object_name = 'courses'
@@ -61,28 +88,42 @@ class CourseCategoriesView(ListView):
     ordering = ['pk']
 
 
-class CourseCategoryAddView(CreateView):
+class CourseCategoryAddView(
+    # TeacherRoleGroupRequiredMixin,
+    CreateView
+):
     fields = '__all__'
     model = CourseCategory
     template_name = 'mainapp/add_category.html'
     success_url = reverse_lazy('mainapp:course_categories')
 
 
-class CourseCategoryUpdateView(UpdateView):
+class CourseCategoryUpdateView(
+    # TeacherRoleGroupRequiredMixin,
+    UpdateView
+):
     fields = '__all__'
     model = CourseCategory
     template_name = 'mainapp/update_category.html'
     success_url = reverse_lazy('mainapp:course_categories')
 
 
-class CourseCategoryDeleteView(DeleteView):
+class CourseCategoryDeleteView(
+    # СuratorRoleGroupRequiredMixin,
+    DeleteView
+):
     model = CourseCategory
     template_name = 'mainapp/delete_category.html'
     success_url = reverse_lazy('mainapp:course_categories')
     context_object_name = 'category'
 
 
-class CourseCategoryDetailView(DetailView):
+class CourseCategoryDetailView(
+    # RegistredRoleGroupRequiredMixin,
+    # StudentRoleGroupRequiredMixin,
+    # TeacherRoleGroupRequiredMixin,
+    DetailView
+):
     model = CourseCategory
     template_name = 'mainapp/category.html'
     context_object_name = 'category'
@@ -103,14 +144,17 @@ class ContactFormView(FormView):
                                  message=message,
                                  )
         send_email_to_admin.delay(email=user_email,
-                                 topic='Нам новое сообщение с формы контактов',
-                                 message=message,
-                                 )
+                                  topic='Нам новое сообщение с формы контактов',
+                                  message=message,
+                                  )
 
         return super().form_valid(form)
 
 
-class UsersInfoView(ListView):
+class UsersInfoView(
+    СuratorRoleGroupRequiredMixin,
+    ListView
+):
     model = MyUser
     template_name = 'mainapp/users_info.html'
     context_object_name = 'users'
