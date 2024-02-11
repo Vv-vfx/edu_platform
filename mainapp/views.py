@@ -1,3 +1,5 @@
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.views import redirect_to_login
 from django.urls import reverse_lazy
 from django.views.generic import (ListView,
                                   TemplateView,
@@ -6,7 +8,7 @@ from django.views.generic import (ListView,
                                   UpdateView,
                                   DeleteView,
                                   FormView)
-from mainapp.models import CourseCategory,Course
+from mainapp.models import CourseCategory, Course
 from mainapp.forms import CourseForm, ContactForm
 from mainapp.tasks import send_email_to_user, send_email_to_admin
 from userapp.models import MyUser
@@ -28,56 +30,87 @@ class ContactView(TemplateView):
     template_name = 'mainapp/contact.html'
 
 
-class CourseDetailView(
-    # RegistredRoleGroupRequiredMixin,
-    # StudentRoleGroupRequiredMixin,
-    # TeacherRoleGroupRequiredMixin,
-    DetailView
-):
-    model = Course
-    template_name = 'mainapp/course.html'
-    context_object_name = 'course'
-
-
-class CourseUpdateView(
-    # TeacherRoleGroupRequiredMixin,
-    UpdateView,
-):
-    fields = '__all__'
-    model = Course
-    template_name = 'mainapp/update_course.html'
-    success_url = reverse_lazy('mainapp:courses')
-
-
-class CourseDeleteView(
-    # СuratorRoleGroupRequiredMixin,
-    DeleteView
-):
-    model = Course
-    template_name = 'mainapp/delete_course.html'
-    success_url = reverse_lazy('mainapp:courses')
-    context_object_name = 'course'
-
-
-class CourseAddView(
-    # TeacherRoleGroupRequiredMixin,
-    CreateView
-):
-    form_class = CourseForm
-    model = Course
-    template_name = 'mainapp/add_course.html'
-    success_url = reverse_lazy('mainapp:courses')
-
-
 class CoursesView(
-    # RegistredRoleGroupRequiredMixin,
-    # StudentRoleGroupRequiredMixin,
-    # TeacherRoleGroupRequiredMixin,
     ListView
 ):
     model = Course
     template_name = 'mainapp/courses.html'
     context_object_name = 'courses'
+
+
+class CourseDetailView(
+    PermissionRequiredMixin,
+    DetailView
+):
+    permission_required = 'mainapp.view_course'
+    model = Course
+    template_name = 'mainapp/course.html'
+    context_object_name = 'course'
+
+    def handle_no_permission(self):
+        # просто перенаправление на другую страницу при отказе в доступе
+        # return redirect('userapp:login')  # например, redirect('login')
+        print(self.request.get_full_path())
+
+        # перенаправление на страницу login и возврат после успешного входа
+        return redirect_to_login(next=self.request.get_full_path(), login_url='userapp:login')
+
+
+class CourseUpdateView(
+    PermissionRequiredMixin,
+    UpdateView,
+):
+    permission_required = 'mainapp.change_course'
+    fields = '__all__'
+    model = Course
+    template_name = 'mainapp/update_course.html'
+    success_url = reverse_lazy('mainapp:courses')
+
+    def handle_no_permission(self):
+        # просто перенаправление на другую страницу при отказе в доступе
+        # return redirect('userapp:login')  # например, redirect('login')
+        print(self.request.get_full_path())
+
+        # перенаправление на страницу login и возврат после успешного входа
+        return redirect_to_login(next=self.request.get_full_path(), login_url='userapp:login')
+
+
+class CourseDeleteView(
+    PermissionRequiredMixin,
+    DeleteView
+):
+    permission_required = 'mainapp.delete_course'
+    model = Course
+    template_name = 'mainapp/delete_course.html'
+    success_url = reverse_lazy('mainapp:courses')
+    context_object_name = 'course'
+
+    def handle_no_permission(self):
+        # просто перенаправление на другую страницу при отказе в доступе
+        # return redirect('userapp:login')  # например, redirect('login')
+        print(self.request.get_full_path())
+
+        # перенаправление на страницу login и возврат после успешного входа
+        return redirect_to_login(next=self.request.get_full_path(), login_url='userapp:login')
+
+
+class CourseAddView(
+    PermissionRequiredMixin,
+    CreateView
+):
+    permission_required = 'mainapp.add_course'
+    form_class = CourseForm
+    model = Course
+    template_name = 'mainapp/add_course.html'
+    success_url = reverse_lazy('mainapp:courses')
+
+    def handle_no_permission(self):
+        # просто перенаправление на другую страницу при отказе в доступе
+        # return redirect('userapp:login')  # например, redirect('login')
+        print(self.request.get_full_path())
+
+        # перенаправление на страницу login и возврат после успешного входа
+        return redirect_to_login(next=self.request.get_full_path(), login_url='userapp:login')
 
 
 # КАТЕГОРИИ КУРСОВ

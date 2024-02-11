@@ -163,23 +163,10 @@ class Command(BaseCommand):
             password='12345'
         )
 
-
-
         # Добавляем в группу Django для "student"
         student_role_group.user_set.add(user)
         # создаем для пользователя токен для DRF
         Token.objects.create(user=user)
-
-        print('user_groups:')
-        groups = user.groups.all()
-        for group in groups:
-            print(group.name)
-
-        print('user_permissions:')
-        permissions = user.user_permissions.all()
-        for perm in permissions:
-            print(perm.codename)
-
 
 
         # ======================================

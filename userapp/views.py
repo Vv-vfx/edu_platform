@@ -5,6 +5,7 @@ from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import DetailView
 from django.views.generic.edit import CreateView
@@ -42,7 +43,7 @@ class UserLoginView(LoginView):
 
     def get_success_url(self):
         # Получаем параметр `next` из запроса
-        next_url = self.request.POST.get('next')
+        next_url = self.request.POST.get('next') or self.request.GET.get('next')
         print(next_url)
 
         # Проверяем, указан ли URL в параметре `next` и является ли он безопасным
@@ -64,6 +65,7 @@ class UserProfileView(LoginRequiredMixin, DetailView):
     model = MyUser
     template_name = 'registration/profile.html'
     context_object_name = 'MyUser'
+    login_url = reverse_lazy('userapp:login')
 
     def get_object(self):
         return self.request.user
@@ -79,3 +81,14 @@ class UserProfileView(LoginRequiredMixin, DetailView):
             context['token'] = 'Пользователь не авторизован'
 
         return context
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        token = Token.objects.get(user=user)
+        token.delete()
+        Token.objects.create(user=user)
+
+        # messages.success(request, 'Токен успешно обновлен.')
+        return redirect('userapp:profile')
+
+
