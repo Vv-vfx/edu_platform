@@ -54,8 +54,19 @@
                     <br>
                 <form action="{% url 'userapp:profile' %}" method="post">
                 {% csrf_token %}
-                <button type="submit" name="regenerate_token">Перегенерировать Токен</button>
+                <button style="color: black;" type="submit" name="regenerate_token">Перегенерировать Токен через Django</button>
                 </form>
+                <script>
+                const authToken = "{{ token }}";
+                console.log(authToken)
+
+                </script>
+
+                <script src="{% static 'frontend/src/update_token.js' %}"></script>
+                <button onclick=updateToken(authToken)>Перегенерировать Токен через AJAX</button>
+
+
+
                 </p>
 			</div>
 		</section>

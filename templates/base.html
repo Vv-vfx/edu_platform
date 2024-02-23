@@ -66,15 +66,16 @@
                                                 <li class="active" ><a href="{% url 'mainapp:index' %}">Главная</a></li>
                                                 <li><a href="{% url 'mainapp:course_categories' %}">Направления</a></li>
                                                 <li><a href="{% url 'mainapp:courses' %}">Курсы</a></li>
-                                                <li><a href="#">Блог</a>
-                                                    <ul class="submenu">
-                                                        <li><a href="blog.html">Блог</a></li>
-                                                        <li><a href="blog_details.html">Подробности блога</a></li>
-                                                        <li><a href="elements.html">Элемент</a></li>
-                                                    </ul>
+{#                                                <li><a href="#">Блог</a>#}
+{#                                                    <ul class="submenu">#}
+{#                                                        <li><a href="blog.html">Блог</a></li>#}
+{#                                                        <li><a href="blog_details.html">Подробности блога</a></li>#}
+{#                                                        <li><a href="elements.html">Элемент</a></li>#}
+{#                                                    </ul>#}
                                                 </li>
                                                 <li><a href="{% url 'mainapp:contact' %}">Контакты</a></li>
                                                 <li><a href="{% url 'mainapp:users_db_info' %}">Пользователи</a></li>
+                                                <li><a href="{% url 'mainapp:fetch_request' %}">Запрос fetch </a></li>
                                                 <!-- Button -->
                                                 {% if user.is_authenticated %}
                                                 <li class="button-header margin-left "><a href="{% url 'userapp:profile' %}" class="btn">Профиль</a></li>

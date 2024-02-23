@@ -8,6 +8,8 @@ from django.views.generic import (ListView,
                                   UpdateView,
                                   DeleteView,
                                   FormView)
+from rest_framework.authtoken.models import Token
+
 from mainapp.models import CourseCategory, Course
 from mainapp.forms import CourseForm, ContactForm
 from mainapp.tasks import send_email_to_user, send_email_to_admin
@@ -199,3 +201,24 @@ class UsersInfoView(
         queryset = queryset.prefetch_related('courses')
 
         return queryset
+
+
+class FetchRequest(TemplateView):
+    template_name = 'mainapp/fetch_request.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Проверяем, аутентифицирован ли пользователь
+        user = self.request.user
+        if user.is_authenticated:
+            # Получаем или создаем токен для пользователя
+            token = Token.objects.get(user=user)
+            context['auth_token'] = token
+        else:
+            context['auth_token'] = 'Пользователь не аутентифицирован'
+
+
+        return context
+
+
