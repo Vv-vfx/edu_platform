@@ -37,9 +37,9 @@
             {{ auth_token }}
         </p>
         <script>
-            const authToken = "{{ auth_token }}";
+            localStorage.setItem('authToken', "{{ auth_token }}")
         </script>
-        <script src="{% static 'frontend/requests_by_token.js' %}"></script>
+        <script src="{% static 'frontend/src/axios_requests_by_token.js' %}"></script>
 
     </section>
 {% endblock %}

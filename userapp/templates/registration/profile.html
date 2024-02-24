@@ -50,20 +50,23 @@
                     <br>
                     API-Token:
                     <br>
-					{{token}}
+					<span id="authToken">{{token}}</span>
+
                     <br>
                 <form action="{% url 'userapp:profile' %}" method="post">
                 {% csrf_token %}
                 <button style="color: black;" type="submit" name="regenerate_token">Перегенерировать Токен через Django</button>
                 </form>
                 <script>
-                const authToken = "{{ token }}";
+                {#const authToken = "{{ token }}";#}
+
+                localStorage.setItem('authToken', "{{ token }}")
                 console.log(authToken)
 
                 </script>
 
-                <script src="{% static 'frontend/src/update_token.js' %}"></script>
-                <button onclick=updateToken(authToken)>Перегенерировать Токен через AJAX</button>
+                <script src="{% static 'frontend/update_token.js' %}"></script>
+                <button style="color: black;" onclick=updateToken(authToken)>Перегенерировать Токен через AJAX</button>
 
 
 

@@ -15,7 +15,7 @@
   \*****************************/
 /***/ (() => {
 
-eval("function updateToken(authToken) {\n  console.log(authToken);\n  fetch('http://127.0.0.1:8000/api/update_token/', {\n    method: 'POST',\n    headers: {\n      'Authorization': 'Token ' + authToken,\n      'Content-Type': 'application/json'\n    }\n  }).then(function (response) {\n    return response.json();\n  }).then(function (data) {\n    console.log('New Token:', data.token);\n    // Обновите токен на клиенте\n    // Например, сохраните новый токен в localStorage или в переменной\n  })[\"catch\"](function (error) {\n    return console.error('Error:', error);\n  });\n}\n\n//# sourceURL=webpack://frontend/./src/update_token.js?");
+eval("function updateToken() {\n  // console.log('Old Token: ', authToken);\n  var authToken = localStorage.getItem('authToken');\n  fetch('http://127.0.0.1:8000/api/update_token/', {\n    method: 'POST',\n    headers: {\n      'Authorization': 'Token ' + authToken,\n      'Content-Type': 'application/json'\n    }\n  }).then(function (response) {\n    return response.json();\n  }).then(function (data) {\n    console.log('New Token:', data.new_token);\n    // Обновляем токен на странице\n    document.getElementById('authToken').innerText = data.new_token;\n    // Обновляем токен на клиенте, сохраняем новый токен в localStorage\n    localStorage.setItem('authToken', data.new_token);\n  })[\"catch\"](function (error) {\n    return console.error('Error:', error);\n  });\n}\n\n//# sourceURL=webpack://frontend/./src/update_token.js?");
 
 /***/ })
 

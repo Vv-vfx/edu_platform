@@ -4,7 +4,8 @@ module.exports = {
   mode: 'development',
   entry: {
     requests_by_token: "./src/requests_by_token.js",
-    update_token: "./src/update_token.js"
+    update_token: "./src/update_token.js",
+    axios_requests_by_token: "./src/axios_requests_by_token.js"
   },
   output: {
     path: path.resolve(__dirname, "../static/frontend/"),

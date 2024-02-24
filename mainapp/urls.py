@@ -19,5 +19,6 @@ urlpatterns = [
     path('contact/', views.ContactFormView.as_view(), name='contact'),
     path('users/', views.UsersInfoView.as_view(), name='users_db_info'),
     path('fetch_request/', views.FetchRequest.as_view(), name='fetch_request'),
+    path('axios_request/', views.AxiosRequest.as_view(), name='axios_request'),
 
 ]

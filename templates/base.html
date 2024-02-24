@@ -76,6 +76,7 @@
                                                 <li><a href="{% url 'mainapp:contact' %}">Контакты</a></li>
                                                 <li><a href="{% url 'mainapp:users_db_info' %}">Пользователи</a></li>
                                                 <li><a href="{% url 'mainapp:fetch_request' %}">Запрос fetch </a></li>
+                                                <li><a href="{% url 'mainapp:axios_request' %}">Запрос axios </a></li>
                                                 <!-- Button -->
                                                 {% if user.is_authenticated %}
                                                 <li class="button-header margin-left "><a href="{% url 'userapp:profile' %}" class="btn">Профиль</a></li>
