@@ -53,20 +53,24 @@
 					<span id="authToken">{{token}}</span>
 
                     <br>
+
+                <script src="{% static 'frontend/update_token.js' %}"></script>
                 <form action="{% url 'userapp:profile' %}" method="post">
                 {% csrf_token %}
                 <button style="color: black;" type="submit" name="regenerate_token">Перегенерировать Токен через Django</button>
                 </form>
+
                 <script>
-                {#const authToken = "{{ token }}";#}
+                const authToken = "{{ token }}";
 
                 localStorage.setItem('authToken', "{{ token }}")
                 console.log(authToken)
 
+
                 </script>
 
-                <script src="{% static 'frontend/update_token.js' %}"></script>
-                <button style="color: black;" onclick=updateToken(authToken)>Перегенерировать Токен через AJAX</button>
+
+                <button style="color: black;" onclick=updateToken()>Перегенерировать Токен через AJAX</button>
 
 
 

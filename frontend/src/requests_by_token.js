@@ -13,13 +13,11 @@ function fetchDataWithToken(token) {
 }
 
 
-function fetchResponce(authToken) {
+window.fetchResponce = function (authToken) {
     if (authToken) {
         fetchDataWithToken(authToken);
     } else {
         console.error('No token received');
     }
 }
-
-fetchResponce(authToken)
 

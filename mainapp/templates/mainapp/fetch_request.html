@@ -36,10 +36,11 @@
         <p>
             {{ auth_token }}
         </p>
-        <script>
-            const authToken = "{{ auth_token }}";
-        </script>
         <script src="{% static 'frontend/requests_by_token.js' %}"></script>
+
+        <script>
+            fetchResponce("{{ auth_token }}");
+        </script>
 
     </section>
 {% endblock %}

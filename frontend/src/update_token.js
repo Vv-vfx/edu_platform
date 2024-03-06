@@ -1,10 +1,12 @@
-function updateToken() {
+console.log('update_token.js is loaded!')
+
+window.updateToken = function() {
     // console.log('Old Token: ', authToken);
-    let authToken = localStorage.getItem('authToken')
+    let oldAuthToken = localStorage.getItem('authToken')
     fetch('http://127.0.0.1:8000/api/update_token/', {
         method: 'POST',
         headers: {
-            'Authorization': 'Token ' + authToken,
+            'Authorization': 'Token ' + oldAuthToken,
             'Content-Type': 'application/json'
         },
     })
@@ -19,4 +21,8 @@ function updateToken() {
 
     })
     .catch(error => console.error('Error:', error));
+}
+
+function aaa() {
+    console.log('aaa called')
 }

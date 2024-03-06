@@ -15,7 +15,7 @@
   \**********************************/
 /***/ (() => {
 
-eval("// Использование токена для запросов к API\nfunction fetchDataWithToken(token) {\n  return fetch('http://localhost:8000/api/course/', {\n    method: 'GET',\n    headers: {\n      'Authorization': 'Token ' + token,\n      'Content-Type': 'application/json'\n    }\n  }).then(function (response) {\n    return response.json();\n  }).then(function (data) {\n    return console.log(data);\n  })[\"catch\"](function (error) {\n    return console.error('Error:', error);\n  });\n}\nfunction fetchResponce(authToken) {\n  if (authToken) {\n    fetchDataWithToken(authToken);\n  } else {\n    console.error('No token received');\n  }\n}\nfetchResponce(authToken);\n\n//# sourceURL=webpack://frontend/./src/requests_by_token.js?");
+eval("// Использование токена для запросов к API\nfunction fetchDataWithToken(token) {\n  return fetch('http://localhost:8000/api/course/', {\n    method: 'GET',\n    headers: {\n      'Authorization': 'Token ' + token,\n      'Content-Type': 'application/json'\n    }\n  }).then(function (response) {\n    return response.json();\n  }).then(function (data) {\n    return console.log(data);\n  })[\"catch\"](function (error) {\n    return console.error('Error:', error);\n  });\n}\nwindow.fetchResponce = function (authToken) {\n  if (authToken) {\n    fetchDataWithToken(authToken);\n  } else {\n    console.error('No token received');\n  }\n};\n\n//# sourceURL=webpack://frontend/./src/requests_by_token.js?");
 
 /***/ })
 
