@@ -16,6 +16,9 @@ services:
       interval: 30s
       timeout: 60s
       retries: 5
+    networks:
+      - edu_backend
+
 
   redis:
     container_name: edu_platform_redis
@@ -38,6 +41,7 @@ services:
     environment:
       - REDIS_URL=redis://:$$REDIS_PASSWORD@redis:6379/0
 
+
   worker_low:
     build:
       context: .
@@ -51,6 +55,8 @@ services:
       - REDIS_URL=redis://:$$REDIS_PASSWORD@redis:6379/0
 
 
+networks:
+  edu_backend:
 #    volumes:
 #      - /path/to/local/dаta:/root/redis
 #      - /path/to/local/redis.conf:/usr/local/etc/redis/redis.conf
