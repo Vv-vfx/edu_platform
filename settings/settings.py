@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
+    'graphene_django',
     # My apps
     'mainapp',
     'userapp',
@@ -75,7 +76,7 @@ ROOT_URLCONF = 'settings.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [Path(BASE_DIR / 'templates'),],
+        'DIRS': [Path(BASE_DIR / 'templates'), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -135,7 +136,6 @@ RQ_QUEUES = {
     }
 }
 
-
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
@@ -173,7 +173,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 LOGIN_REDIRECT_URL = reverse_lazy('userapp:profile')
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -222,4 +221,8 @@ LOGGING = {
             'propagate': True,
         },
     },
+}
+
+GRAPHENE = {
+    "SCHEMA": "api.schema.schema"
 }
